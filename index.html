@@ -309,24 +309,28 @@ Har doim yangilikda bo‘l!
             moves++;
             document.getElementById("moves").textContent = moves;
             sounds.move.play();
+
+            // Rekordni yangilash har harakatdan keyin
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem('bestScore', bestScore);
+                updateStats();
+            }
+
             checkStatus();
         }
     }
 
     function checkStatus() {
         if (board.flat().includes(2048)) {
-            document.getElementById("status").textContent = "🎉 Siz 2048 ga yetdingiz!";
+            document.getElementById("status").textContent = "🎉 Siz 2048 ga yetdingiz! 🎉";
             sounds.win.play();
             document.removeEventListener("keydown", keyHandler);
             winsCount++; // g'alabani oshiramiz
-            if (score > bestScore) {
-                bestScore = score; // rekord yangilandi
-                localStorage.setItem('bestScore', bestScore);
-            }
             localStorage.setItem('winsCount', winsCount);
             updateStats();
         } else if (!canMove()) {
-            document.getElementById("status").textContent = "❌ O‘yin tugadi!";
+            document.getElementById("status").textContent = "😞 O'yin tugadi! Yana urinib ko'ring.";
             sounds.lose.play();
             document.removeEventListener("keydown", keyHandler);
         }
@@ -353,6 +357,7 @@ Har doim yangilikda bo‘l!
     document.getElementById("restart").addEventListener("click", () => {
         startGame();
     });
+
 
     // O'yin haqida Modal tugmalari
     const modal = document.getElementById("modal");
